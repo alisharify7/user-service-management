@@ -11,8 +11,8 @@ class Users(BaseModel):
     __tablename__ = BaseModel.set_table_name("users")
 
     class Gender(enum.Enum):
-        female: str = "feman"
-        male: str = "man"
+        female: str = "female"
+        male: str = "male"
         other: str = "other"
 
     first_name: so.Mapped[str] = so.mapped_column(sa.String(256), unique=False, nullable=True)
