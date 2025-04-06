@@ -52,7 +52,6 @@ class BaseSetting:
     SQLALCHEMY_DATABASE_URI: str = (
         f"postgresql+psycopg2://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
     )
-    print(SQLALCHEMY_DATABASE_URI)
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
     DEBUG_QUERY: bool = os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
 
