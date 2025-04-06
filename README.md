@@ -1,4 +1,5 @@
-# User Management Microservice
+# 👥 User Management Microservice (FastAPI + RabbitMQ)
+
 
 A FastAPI-based microservice for user management with RabbitMQ event integration, providing RESTful APIs and message queue support for distributed systems.
 
@@ -8,16 +9,25 @@ A FastAPI-based microservice for user management with RabbitMQ event integration
 - **RabbitMQ Integration**: Event-driven architecture for microservice communication
 - **RESTful API**: Fully documented endpoints following OpenAPI standards
 - **Scalable Design**: Ready for containerized deployment in cloud environments
+* **Comprehensive User Management**: Add, edit, and delete users.
+* **Powerful API**: Exposes RESTful APIs for user management.
+* **RabbitMQ Support**: Listens to RabbitMQ queues for asynchronous operations.
+* **Microservice-Ready**: Designed for use in microservice architectures.
+* **Automatic Documentation**: Uses Swagger UI for automatic API documentation.
+* **Data Validation**: Employs Pydantic for input/output data validation.
+* **Persistence**: Utilizes a database for user data storage.
 
 ## API Endpoints
 
-| Endpoint          | Method | Description                     |
-|-------------------|--------|---------------------------------|
-| `/users`          | POST   | Create new user                 |
-| `/users`          | GET    | List all users                  |
-| `/users/{user_id}`| GET    | Get user details                |
-| `/users/{user_id}`| PUT    | Update user                     |
-| `/users/{user_id}`| DELETE | Delete user                     |
+| Endpoint                           | Method | Description                        |
+|------------------------------------|--------|------------------------------------|
+| `/users`                           | POST   | Create new user                    |
+| `/users`                           | GET    | List all users                     |
+| `/users/id/{user_id}`              | GET    | Get user details by its id         |
+| `/users/username/{username}`       | GET    | Get user details by its username   |
+| `/users/public_key/{public_key}` | GET    | Get user details by its public key |
+| `/users/{user_id}`                 | PUT    | Update user                        |
+| `/users/{user_id}`                 | DELETE | Delete user                        |
 
 ## RabbitMQ Queues
 
