@@ -13,7 +13,7 @@ class Gender(enum.Enum):
     male: str = "male"
     other: str = "other"
 
-class Users(BaseModel):
+class User(BaseModel):
     __tablename__ = BaseModel.set_table_name("users")
     first_name: so.Mapped[str] = so.mapped_column(sa.String(256), unique=False, nullable=True)
     last_name: so.Mapped[str] = so.mapped_column(sa.String(256), unique=False, nullable=True)
@@ -24,3 +24,13 @@ class Users(BaseModel):
     last_login: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(sa.TIMESTAMP(), nullable=True)
     login_attempts: so.Mapped[int] = so.mapped_column(sa.BigInteger(), default=0, nullable=False)
     gender: so.Mapped[Gender] = so.mapped_column(sa.Enum(Gender), nullable=True)
+
+
+    def set_password(self):
+        pass
+    def set_username(self):
+        pass
+    def set_phone_number(self):
+        pass
+    def set_email_address(self):
+        pass
