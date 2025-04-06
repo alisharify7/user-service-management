@@ -3,6 +3,17 @@
 
 A FastAPI-based microservice for user management with RabbitMQ event integration, providing RESTful APIs and message queue support for distributed systems.
 
+
+## Tech Stack
+<div>
+	<img src="https://skillicons.dev/icons?i=python"/>
+	<img src="https://skillicons.dev/icons?i=fastapi"/>
+	<img src="https://skillicons.dev/icons?i=postgresql"/>
+    <img src="https://skillicons.dev/icons?i=rabbitmq"/>
+    <img src="https://skillicons.dev/icons?i=redis"/>
+	<img src="https://skillicons.dev/icons?i=docker"/>
+</div>
+
 ## Features
 
 - **User CRUD Operations**: Create, Read, Update, and Delete users via API
