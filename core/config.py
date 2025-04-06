@@ -50,8 +50,9 @@ class BaseSetting:
     DATABASE_PASSWORD: str = os.environ.get("DATABASE_PASSWORD", "")
     DATABASE_TABLE_PREFIX_NAME: str = os.environ.get("DATABASE_TABLE_PREFIX", "")
     SQLALCHEMY_DATABASE_URI: str = (
-        f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
+        f"postgresql+psycopg2://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
     )
+    print(SQLALCHEMY_DATABASE_URI)
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
     DEBUG_QUERY: bool = os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
 
