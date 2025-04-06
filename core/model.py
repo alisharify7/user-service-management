@@ -53,7 +53,7 @@ class BaseModel(BaseModelClass):
         self.public_key = uuid.uuid4().hex
     def save(
         self,
-        session: so.sessionmaker | None = None,
+        session: so.Session | None = None,
         show_traceback: bool = True,
         capture_tracekback: bool = True,
     ) -> bool:
@@ -87,7 +87,7 @@ class BaseModel(BaseModelClass):
             db.close()  # Always close the session to free up resources
 
     def delete(
-        self, capture_exception: bool = False, session: so.sessionmaker | None = None
+        self, capture_exception: bool = False, session: so.Session | None = None
     ):
         """delete method"""
         db = session or get_session()

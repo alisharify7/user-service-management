@@ -21,10 +21,11 @@ Session = sessionmaker(
 
 BaseModelClass = declarative_base()
 
-def get_session():
+def get_session() -> sessionmaker:
     """get a fresh session for connection to database
     """
     session = Session()
+    session.q
     try:
         yield session
     finally:
