@@ -3,6 +3,7 @@ from typing import Optional
 from datetime import datetime
 from users.model import Gender
 
+
 class CreateUserScheme(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None

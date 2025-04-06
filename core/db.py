@@ -13,21 +13,15 @@ engine = create_engine(
 )
 
 
-Session = sessionmaker(
-    bind=engine,
-    autoflush=False,
-    autocommit=False
-)
+Session = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 BaseModelClass = declarative_base()
 
+
 def get_session() -> sessionmaker:
-    """get a fresh session for connection to database
-    """
+    """get a fresh session for connection to database"""
     session = Session()
     try:
         yield session
     finally:
         session.close()
-
-

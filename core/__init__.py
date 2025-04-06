@@ -5,8 +5,9 @@ from core.db import BaseModelClass, engine
 
 Settings = get_config()
 
+
 def create_app(config_class: object) -> FastAPI:
-    """main factory function for generation fastapi application """
+    """main factory function for generation fastapi application"""
     app = FastAPI(
         debug=config_class.DEBUG,
         title=config_class.API_NAME,
@@ -21,6 +22,6 @@ def create_app(config_class: object) -> FastAPI:
     for router in urlpatterns:
         app.include_router(router["router"], prefix=router["prefix"])
 
-    BaseModelClass.metadata.create_all(bind=engine) # TODO: replace with alembic
+    BaseModelClass.metadata.create_all(bind=engine)  # TODO: replace with alembic
 
     return app

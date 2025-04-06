@@ -9,11 +9,14 @@ from core import get_config
 from core.db import BaseModelClass, get_session
 
 Setting = get_config()
+
+
 class BaseModel(BaseModelClass):
     """
     Base Parent Abstract Model.
     all models inheritance from this model.
     """
+
     __abstract__ = True
     id: so.Mapped[int] = so.mapped_column(sa.BigInteger(), primary_key=True)
     is_active: so.Mapped[bool] = so.mapped_column(
@@ -76,9 +79,7 @@ class BaseModel(BaseModelClass):
         except Exception as e:
             db.rollback()
             if show_traceback:
-                print(
-                    "Error occurred while saving the object", e
-                )
+                print("Error occurred while saving the object", e)
 
             if capture_tracekback:
                 return e

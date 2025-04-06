@@ -1,7 +1,7 @@
 """
- * user service management
- * author: @alisharify7
- * © Copyright 2024-1403.
+* user service management
+* author: @alisharify7
+* © Copyright 2024-1403.
 """
 
 import base64
@@ -10,6 +10,7 @@ import random
 import string
 
 SysRandom = random.SystemRandom()
+
 
 def generate_random_string(length: int = 6, punctuation: bool = True) -> str:
     """generate strong random strings
