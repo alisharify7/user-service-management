@@ -51,6 +51,7 @@ class BaseModel(BaseModelClass):
     def set_public_key(self):
         """This Method Set a Unique PublicKey of each record"""
         self.public_key = uuid.uuid4().hex
+
     def save(
         self,
         session: so.Session | None = None,

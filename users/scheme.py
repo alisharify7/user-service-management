@@ -7,7 +7,7 @@ class CreateUserScheme(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     username: constr(max_length=256)
-    password: constr(max_length=256)
+    password: constr(max_length=128)
     email_address: Optional[EmailStr] = None
     phone_number: Optional[constr(max_length=16)] = None
     last_login: Optional[datetime] = None
