@@ -1,7 +1,11 @@
 from fastapi import FastAPI
+
 from core.config import get_config
 from core.urls import urlpatterns
 from core.db import BaseModelClass, engine
+
+from fastapi_pagination import add_pagination, paginate
+
 
 Settings = get_config()
 
@@ -18,6 +22,8 @@ def create_app(config_class: object) -> FastAPI:
         redoc_url=config_class.API_REDOC_URL,
         terms_of_service=config_class.API_TERM_URL,
     )
+
+    add_pagination(app)
 
     for router in urlpatterns:
         app.include_router(router["router"], prefix=router["prefix"])

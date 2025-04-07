@@ -1,6 +1,9 @@
 from typing import List
 
 from fastapi import Depends, HTTPException
+from fastapi_pagination import Page, Params
+from fastapi_pagination.ext.sqlalchemy import paginate
+
 from starlette import status as http_status
 
 import sqlalchemy as sa
@@ -65,18 +68,11 @@ async def get_user_by_public_key(
 
     return result[0]
 
-@users_router.get("/", response_model=List[DumpUserScheme])
-async def get_all_users(db_session: so.Session = Depends(get_session)):
+@users_router.get("/", response_model=Page[DumpUserScheme])
+async def get_all_users(params: Params = Depends(), db_session: so.Session = Depends(get_session)):
     """returns all users in pagination"""
-    # TODO: add pagination
-    query = sa.select(UserModel)
-    result = db_session.execute(query).scalars().all()
-    if not result:
-        raise HTTPException(
-            status_code=http_status.HTTP_404_NOT_FOUND,
-            detail="there is no user in db.",
-        )
-    return result
+    return paginate(db_session, sa.select(UserModel), params)
+
 
 
 @users_router.put("/{user_id}", status_code=http_status.HTTP_204_NO_CONTENT)
