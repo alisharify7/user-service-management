@@ -6,6 +6,7 @@ from starlette import status as http_status
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+import sqlalchemy.ext.asyncio as AsyncSA
 
 from core.db import get_session
 
@@ -18,10 +19,10 @@ import users.operations as user_operations
 
 @users_router.post("/", response_model=DumpUserScheme)
 async def create_user(
-    user_data: CreateUserScheme, db_session: so.Session = Depends(get_session)
+    user_data: CreateUserScheme, db_session: AsyncSA.AsyncSession  = Depends(get_session)
 ):
     """creating new user in database."""
-    result = user_operations.create_user(
+    result = await user_operations.create_user(
         user_data=user_data, db_session=db_session
     )
     if len(result) != 1:
@@ -31,11 +32,11 @@ async def create_user(
 
 @users_router.get("/id/{user_id}", response_model=DumpUserScheme)
 async def get_user_by_id(
-    user_id: int, db_session: so.Session = Depends(get_session)
+    user_id: int, db_session: AsyncSA.AsyncSession = Depends(get_session)
 ):
     """retrieve a user with  id"""
-    result = user_operations.get_user_by_id(
-        user_data=user_id, db_session=db_session
+    result = await user_operations.get_user_by_id(
+        user_id=user_id, db_session=db_session
     )
     if len(result) != 1:
         raise HTTPException(status_code=result[0], detail=result[1])
@@ -44,10 +45,10 @@ async def get_user_by_id(
 
 @users_router.get("/username/{username}", response_model=DumpUserScheme)
 async def get_user_by_username(
-    username: str, db_session: so.Session = Depends(get_session)
+    username: str, db_session: AsyncSA.AsyncSession = Depends(get_session)
 ):
     """retrieve a user with a username"""
-    result = user_operations.get_user_by_username(
+    result = await user_operations.get_user_by_username(
         username=username, db_session=db_session
     )
     if len(result) != 1:
@@ -57,10 +58,10 @@ async def get_user_by_username(
 
 @users_router.get("/public_key/{public_key}", response_model=DumpUserScheme)
 async def get_user_by_public_key(
-    public_key: str, db_session: so.Session = Depends(get_session)
+    public_key: str, db_session: AsyncSA.AsyncSession = Depends(get_session)
 ):
     """retrieve a user with a public-key"""
-    result = user_operations.get_user_by_public_key(
+    result = await user_operations.get_user_by_public_key(
         public_key=public_key, db_session=db_session
     )
     if len(result) != 1:
@@ -78,19 +79,19 @@ def get_all_users_pagination(
 @users_router.get("/", response_model=Page[DumpUserScheme])
 async def get_all_users(
     params: Params = Depends(get_all_users_pagination),
-    db_session: so.Session = Depends(get_session),
+    db_session: AsyncSA.AsyncSession = Depends(get_session),
 ):
-    return paginate(db_session, sa.select(UserModel), params)
+    return await paginate(db_session, sa.select(UserModel), params)
 
 
 @users_router.put("/{user_id}", status_code=http_status.HTTP_204_NO_CONTENT)
 async def update_user(
     user_id: int,
     user_data: UpdateUserScheme,
-    db_session: so.Session = Depends(get_session),
+    db_session: AsyncSA.AsyncSession = Depends(get_session),
 ):
     """Update a specific user"""
-    result = user_operations.update_user(
+    result = await user_operations.update_user(
         user_id=user_id, db_session=db_session, user_data=user_data
     )
     if len(result) != 1:
@@ -103,10 +104,10 @@ async def update_user(
     "/id/{user_id}", status_code=http_status.HTTP_204_NO_CONTENT
 )
 async def delete_user_by_id(
-    user_id: int, db_session: so.Session = Depends(get_session)
+    user_id: int, db_session: AsyncSA.AsyncSession = Depends(get_session)
 ):
     """delete a user with given user id"""
-    result = user_operations.delete_user(
+    result = await user_operations.delete_user(
         user_id=user_id, db_session=db_session
     )
     if len(result) != 1:

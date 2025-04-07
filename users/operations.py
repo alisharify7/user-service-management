@@ -1,12 +1,15 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+import sqlalchemy.ext.asyncio as AsyncSA
 
 from core.extensions import hashManager
 from users.model import User as UserModel
 from starlette import status as http_status
 
 
-def create_user(user_data: dict, db_session: so.Session) -> tuple:
+async def create_user(
+    user_data: dict, db_session: AsyncSA.AsyncSession
+) -> tuple:
     """
     Attempts to create a new user in the database.
 
@@ -27,7 +30,7 @@ def create_user(user_data: dict, db_session: so.Session) -> tuple:
             UserModel.email_address == user_data.email_address,
         )
     )
-    result = db_session.execute(query).scalar_one_or_none()
+    result = (await db_session.execute(query)).scalar_one_or_none()
     if result:
         if result.username == user_data.username:
             return (
@@ -51,19 +54,19 @@ def create_user(user_data: dict, db_session: so.Session) -> tuple:
     db_session.add(new_user)
 
     try:
-        db_session.commit()
+        await db_session.commit()
     except Exception as e:
         print(e)
-        db_session.rollback()
+        await db_session.rollback()
         return (
             http_status.HTTP_500_INTERNAL_SERVER_ERROR,
             f"there was an error in the saving the user in db. check logs for more info. + {e.args}",
         )
-    db_session.refresh(new_user)
+    await db_session.refresh(new_user)
     return (new_user,)
 
 
-def delete_user(user_id: int, db_session: so.Session) -> tuple:
+async def delete_user(user_id: int, db_session: AsyncSA.AsyncSession) -> tuple:
     """
     Attempts to delete a user by their ID.
 
@@ -80,8 +83,8 @@ def delete_user(user_id: int, db_session: so.Session) -> tuple:
 
     query = sa.delete(UserModel).filter_by(id=user_id)
     try:
-        result = db_session.execute(query)
-        db_session.commit()
+        result = await db_session.execute(query)
+        await db_session.commit()
         if result.rowcount > 0:
             return (True,)
         else:
@@ -90,15 +93,15 @@ def delete_user(user_id: int, db_session: so.Session) -> tuple:
                 "User not found or no changes made",
             )
     except Exception as e:
-        db_session.rollback()
+        await db_session.rollback()
         return (
             http_status.HTTP_500_INTERNAL_SERVER_ERROR,
             "An error occurred",
         )
 
 
-def update_user(
-    user_data: dict, user_id: int, db_session: so.Session
+async def update_user(
+    user_data: dict, user_id: int, db_session: AsyncSA.AsyncSession
 ) -> tuple:
     """
     Updates the information of an existing user.
@@ -121,8 +124,8 @@ def update_user(
         sa.update(UserModel).where(UserModel.id == user_id).values(**user_data)
     )
     try:
-        result = db_session.execute(query)
-        db_session.commit()
+        result = await db_session.execute(query)
+        await db_session.commit()
         if result.rowcount > 0:
             return (True,)
         else:
@@ -131,14 +134,16 @@ def update_user(
                 "User not found or no changes made",
             )
     except Exception as e:
-        db_session.rollback()
+        await db_session.rollback()
         return (
             http_status.HTTP_500_INTERNAL_SERVER_ERROR,
             "An error occurred",
         )
 
 
-def get_user_by_id(user_id: int, db_session: so.Session) -> tuple:
+async def get_user_by_id(
+    user_id: int, db_session: AsyncSA.AsyncSession
+) -> tuple:
     """
     Retrieves a user by their unique ID.
 
@@ -149,7 +154,7 @@ def get_user_by_id(user_id: int, db_session: so.Session) -> tuple:
         - On failure: a tuple with HTTP status code and error message.
     """
     query = sa.select(UserModel).filter_by(id=user_id)
-    result = db_session.execute(query).scalar_one_or_none()
+    result = (await db_session.execute(query)).scalar_one_or_none()
     if not result:
         return (
             http_status.HTTP_404_NOT_FOUND,
@@ -158,7 +163,9 @@ def get_user_by_id(user_id: int, db_session: so.Session) -> tuple:
     return (result,)
 
 
-def get_user_by_username(username: str, db_session: so.Session) -> tuple:
+async def get_user_by_username(
+    username: str, db_session: AsyncSA.AsyncSession
+) -> tuple:
     """
     Retrieves a user by their username.
 
@@ -169,7 +176,7 @@ def get_user_by_username(username: str, db_session: so.Session) -> tuple:
         - On failure: a tuple with HTTP status code and error message.
     """
     query = sa.select(UserModel).filter_by(username=username)
-    result = db_session.execute(query).scalar_one_or_none()
+    result = (await db_session.execute(query)).scalar_one_or_none()
     if not result:
         return (
             http_status.HTTP_404_NOT_FOUND,
@@ -178,7 +185,9 @@ def get_user_by_username(username: str, db_session: so.Session) -> tuple:
     return (result,)
 
 
-def get_user_by_public_key(public_key: str, db_session: so.Session) -> tuple:
+async def get_user_by_public_key(
+    public_key: str, db_session: AsyncSA.AsyncSession
+) -> tuple:
     """
     Retrieves a user by their public key.
 
@@ -189,7 +198,7 @@ def get_user_by_public_key(public_key: str, db_session: so.Session) -> tuple:
         - On failure: a tuple with HTTP status code and error message.
     """
     query = sa.select(UserModel).filter_by(public_key=public_key)
-    result = db_session.execute(query).scalar_one_or_none()
+    result = (await db_session.execute(query)).scalar_one_or_none()
     if not result:
         return (
             http_status.HTTP_404_NOT_FOUND,

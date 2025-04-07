@@ -1,11 +1,17 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from typing import AsyncGenerator
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    AsyncSession,
+    async_sessionmaker,
+)
+
+from sqlalchemy.orm import declarative_base
 from core.config import get_config
 
 Setting = get_config()
 
 
-engine = create_engine(
+engine = create_async_engine(
     url=Setting.SQLALCHEMY_DATABASE_URI,
     pool_size=30,
     max_overflow=10,
@@ -13,15 +19,12 @@ engine = create_engine(
 )
 
 
-Session = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+Session = async_sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 BaseModelClass = declarative_base()
 
 
-def get_session() -> sessionmaker:
-    """get a fresh session for connection to database"""
-    session = Session()
-    try:
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    """Get a fresh session for connection to database"""
+    async with Session() as session:
         yield session
-    finally:
-        session.close()

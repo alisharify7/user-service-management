@@ -28,8 +28,15 @@ def create_app(config_class: object) -> FastAPI:
     for router in urlpatterns:
         app.include_router(router["router"], prefix=router["prefix"])
 
-    BaseModelClass.metadata.create_all(
-        bind=engine
-    )  # TODO: replace with alembic
-
     return app
+
+
+
+
+# # TEMP #
+# import asyncio
+# async def create_all_tables():
+#     async with engine.begin() as conn:
+#         await conn.run_sync(BaseModelClass.metadata.create_all)
+# asyncio.run(create_all_tables())
+# # TEMP #

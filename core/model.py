@@ -4,6 +4,7 @@ import datetime
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+import sqlalchemy.ext.asyncio as AsyncSA
 
 from core import get_config
 from core.db import BaseModelClass, get_session
@@ -27,17 +28,19 @@ class BaseModel(BaseModelClass):
     )  # unique key for each element <usually used in frontend>
     created_at: so.Mapped[typing.Optional[datetime.datetime]] = (
         so.mapped_column(
-            sa.TIMESTAMP, default=lambda: datetime.datetime.now(datetime.UTC)
+            sa.TIMESTAMP(timezone=True),  # Add timezone support
+            default=lambda: datetime.datetime.now(datetime.UTC)
         )
     )
     verified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
         so.mapped_column(
-            sa.TIMESTAMP, default=lambda: datetime.datetime.now(datetime.UTC)
+            sa.TIMESTAMP(timezone=True),
+            default=lambda: datetime.datetime.now(datetime.UTC)
         )
     )
     modified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
         so.mapped_column(
-            sa.TIMESTAMP,
+            sa.TIMESTAMP(timezone=True),
             onupdate=lambda: datetime.datetime.now(datetime.UTC),
             default=lambda: datetime.datetime.now(datetime.UTC),
         )
@@ -61,11 +64,11 @@ class BaseModel(BaseModelClass):
         """This Method Set a Unique PublicKey of each record"""
         self.public_key = uuid.uuid4().hex
 
-    def save(
+    async def save(
         self,
-        session: so.Session | None = None,
+        db_session: AsyncSA.AsyncSession | None = None,
         show_traceback: bool = True,
-        capture_tracekback: bool = True,
+        capture_traceback: bool = True,
     ) -> bool:
         """
         Combination of two steps: add and commit session
@@ -76,38 +79,35 @@ class BaseModel(BaseModelClass):
         :return: True if the save operation is successful, otherwise False
         """
 
-        db = session or get_session()
-
+        session: AsyncSA.AsyncSession = db_session or get_session()
         try:
-            db.add(self)
-            db.commit()
+            session.add(self)
+            await session.commit()
             return True
         except Exception as e:
-            db.rollback()
+            await session.rollback()
             if show_traceback:
                 print("Error occurred while saving the object", e)
 
-            if capture_tracekback:
+            if capture_traceback:
                 return e
 
             return False
-        finally:
-            db.close()  # Always close the session to free up resources
 
-    def delete(
+    async def delete(
         self,
         capture_exception: bool = False,
-        session: so.Session | None = None,
+        session: AsyncSA.AsyncSession | None = None,
     ):
         """delete method"""
-        db = session or get_session()
+        db: AsyncSA.AsyncSession = session or get_session()
 
         try:
-            db.delete(self)
-            db.commit()
+            await db.delete(self)
+            await db.commit()
             return True
         except Exception as e:
-            db.rollback()
+            await db.rollback()
             if capture_exception:
                 return e
             return False
