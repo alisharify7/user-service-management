@@ -97,7 +97,6 @@ def delete_user(user_id: int, db_session: so.Session) -> tuple:
         )
 
 
-
 def update_user(
     user_data: dict, user_id: int, db_session: so.Session
 ) -> tuple:
@@ -199,7 +198,7 @@ def get_user_by_public_key(public_key: str, db_session: so.Session) -> tuple:
     return (result,)
 
 
-def get_all_users():
-    ...
+def get_all_users(): ...
+
 
 # TODO: instead of get_user_by a field create a function get_user_by_field

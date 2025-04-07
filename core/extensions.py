@@ -1,3 +1,3 @@
 from passlib.context import CryptContext
-hashManager = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+hashManager = CryptContext(schemes=["bcrypt"], deprecated="auto")
