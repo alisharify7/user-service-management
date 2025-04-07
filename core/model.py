@@ -25,16 +25,22 @@ class BaseModel(BaseModelClass):
     public_key: so.Mapped[str] = so.mapped_column(
         sa.String(36), nullable=False, unique=True, index=True
     )  # unique key for each element <usually used in frontend>
-    created_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
-        sa.TIMESTAMP, default=lambda: datetime.datetime.now(datetime.UTC)
+    created_at: so.Mapped[typing.Optional[datetime.datetime]] = (
+        so.mapped_column(
+            sa.TIMESTAMP, default=lambda: datetime.datetime.now(datetime.UTC)
+        )
     )
-    verified_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
-        sa.TIMESTAMP, default=lambda: datetime.datetime.now(datetime.UTC)
+    verified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
+        so.mapped_column(
+            sa.TIMESTAMP, default=lambda: datetime.datetime.now(datetime.UTC)
+        )
     )
-    modified_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
-        sa.TIMESTAMP,
-        onupdate=lambda: datetime.datetime.now(datetime.UTC),
-        default=lambda: datetime.datetime.now(datetime.UTC),
+    modified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
+        so.mapped_column(
+            sa.TIMESTAMP,
+            onupdate=lambda: datetime.datetime.now(datetime.UTC),
+            default=lambda: datetime.datetime.now(datetime.UTC),
+        )
     )
 
     @staticmethod
@@ -89,7 +95,9 @@ class BaseModel(BaseModelClass):
             db.close()  # Always close the session to free up resources
 
     def delete(
-        self, capture_exception: bool = False, session: so.Session | None = None
+        self,
+        capture_exception: bool = False,
+        session: so.Session | None = None,
     ):
         """delete method"""
         db = session or get_session()

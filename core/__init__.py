@@ -22,6 +22,8 @@ def create_app(config_class: object) -> FastAPI:
     for router in urlpatterns:
         app.include_router(router["router"], prefix=router["prefix"])
 
-    BaseModelClass.metadata.create_all(bind=engine)  # TODO: replace with alembic
+    BaseModelClass.metadata.create_all(
+        bind=engine
+    )  # TODO: replace with alembic
 
     return app

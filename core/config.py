@@ -18,7 +18,9 @@ load_dotenv()
 class BaseSetting:
     """Base Setting class"""
 
-    SECRET_KEY: str = os.environ.get("APP_SECRET_KEY", generate_random_string())
+    SECRET_KEY: str = os.environ.get(
+        "APP_SECRET_KEY", generate_random_string()
+    )
     if not os.environ.get("APP_SECRET_KEY", False):
         print(  # TODO: use logger instead of print
             "SECRET_KEY was not found in .env file, fall back "
@@ -46,12 +48,16 @@ class BaseSetting:
     DATABASE_HOST: str = os.environ.get("DATABASE_HOST", "")
     DATABASE_USERNAME: str = os.environ.get("DATABASE_USERNAME", "")
     DATABASE_PASSWORD: str = os.environ.get("DATABASE_PASSWORD", "")
-    DATABASE_TABLE_PREFIX_NAME: str = os.environ.get("DATABASE_TABLE_PREFIX", "")
+    DATABASE_TABLE_PREFIX_NAME: str = os.environ.get(
+        "DATABASE_TABLE_PREFIX", ""
+    )
     SQLALCHEMY_DATABASE_URI: str = (
         f"postgresql+psycopg2://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
-    DEBUG_QUERY: bool = os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
+    DEBUG_QUERY: bool = (
+        os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
+    )
 
     def __str__(self):
         return "BaseSetting Class"
