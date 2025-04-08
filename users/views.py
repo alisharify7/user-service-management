@@ -19,7 +19,8 @@ import users.operations as user_operations
 
 @users_router.post("/", response_model=DumpUserScheme)
 async def create_user(
-    user_data: CreateUserScheme, db_session: AsyncSA.AsyncSession  = Depends(get_session)
+    user_data: CreateUserScheme,
+    db_session: AsyncSA.AsyncSession = Depends(get_session),
 ):
     """creating new user in database."""
     result = await user_operations.create_user(

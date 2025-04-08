@@ -29,13 +29,13 @@ class BaseModel(BaseModelClass):
     created_at: so.Mapped[typing.Optional[datetime.datetime]] = (
         so.mapped_column(
             sa.TIMESTAMP(timezone=True),  # Add timezone support
-            default=lambda: datetime.datetime.now(datetime.UTC)
+            default=lambda: datetime.datetime.now(datetime.UTC),
         )
     )
     verified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
         so.mapped_column(
             sa.TIMESTAMP(timezone=True),
-            default=lambda: datetime.datetime.now(datetime.UTC)
+            default=lambda: datetime.datetime.now(datetime.UTC),
         )
     )
     modified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
