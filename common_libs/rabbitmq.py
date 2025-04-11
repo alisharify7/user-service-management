@@ -146,3 +146,25 @@ class RabbitMQManger:
         self.queues[queue_name] = queue  # Store the declared queue
         print(f"Queue '{queue_name}' declared successfully.")
         return queue
+
+
+
+
+# async def main():
+#     async with RabbitMQManger() as manager:
+#         channel = await manager.get_channel()
+#         queue_name= "test_ali"
+#         queue = await manager.declare_queue(queue_name)
+#
+#         message_body = "test hello world"
+#         message = aio_pika.Message(body=message_body.encode())
+#         await channel.default_exchange.publish(
+#             message, routing_key=queue.name
+#         )
+#         print(f"Message '{message_body}' sent to queue '{queue_name}'")
+#
+#
+#
+#
+# if __name__ == "__main__":
+#     asyncio.run(main())
