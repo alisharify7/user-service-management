@@ -81,12 +81,19 @@ class Setting(BaseSetting):
     REDIS_API_KEY_URI: str = os.environ.get("REDIS_API_KEY_URI", "localhost")
     REDIS_API_KEY_INTERFACE = redis.Redis.from_url(REDIS_API_KEY_URI)
 
-    # arvan AWS s3 object storage config
+    #  s3 object storage config
     AWS_BUCKET_NAME: str = os.environ.get("AWS_BUCKET_NAME", "")
     AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY")
     AWS_ENDPOINT_URL: str = os.environ.get("AWS_WRITE_ENDPOINT_URL")
     AWS_READ_ENDPOINT_URL: str = os.environ.get("AWS_READ_ENDPOINT_URL")
+
+    # RabbitMQ Config
+    RABBITMQ_USERNAME: str = os.environ.get("RABBITMQ_USERNAME")
+    RABBITMQ_PASSWORD: str = os.environ.get("RABBITMQ_PASSWORD")
+    RABBITMQ_HOST: str = os.environ.get("RABBITMQ_HOST")
+    RABBITMQ_PORT: str = os.environ.get("RABBITMQ_PORT")
+    RABBITMQ_VHOST: str = os.environ.get("RABBITMQ_VHOST")
 
     def __str__(self):
         return "Setting Class"
