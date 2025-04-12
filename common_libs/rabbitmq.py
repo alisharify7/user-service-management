@@ -1,3 +1,12 @@
+"""
+* users management
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2025 - ali sharifi
+* https://github.com/alisharify7/user-service-management
+"""
+
 import typing
 import aio_pika
 import asyncio
@@ -12,10 +21,10 @@ class RabbitMQManger:
     This class follows the Singleton design pattern to ensure that only one instance exists.
     """
 
-    instance: typing.Optional['RabbitMQManger'] = None
+    instance: typing.Optional["RabbitMQManger"] = None
     queues: typing.Dict[str, AbstractRobustQueue] = {}
 
-    def __new__(cls, *args, **kwargs) -> 'RabbitMQManger':
+    def __new__(cls, *args, **kwargs) -> "RabbitMQManger":
         """
         Singleton pattern to ensure only one instance of RabbitMQManger is created.
 
@@ -33,6 +42,7 @@ class RabbitMQManger:
         username: str = "guest",
         password: str = "guest",
         max_retry_connection: int = 10,
+        virtual_host: str = "/",
     ) -> None:
         """
         Initializes the RabbitMQManger instance.
@@ -52,6 +62,7 @@ class RabbitMQManger:
         self.channel: typing.Optional[AbstractRobustChannel] = None
         self.max_retry_connection = max_retry_connection
         self.queues: typing.Dict[str, AbstractRobustQueue] = {}
+        self.virtual_host = virtual_host
 
     async def _connect(self) -> None:
         """
@@ -69,17 +80,21 @@ class RabbitMQManger:
                     password=self.password,
                     host=self.host,
                     port=self.port,
-                    virtual_host="/",
+                    virtual_host=self.virtual_host,
                 )
                 print("Connected successfully.")
                 return
             except aio_pika.exceptions.AMQPError as e:
                 retries += 1
                 wait_time = retries * 2
-                print(f"Connection error. Waiting for {wait_time} seconds.\n{e}")
+                print(
+                    f"Connection error. Waiting for {wait_time} seconds.\n{e}"
+                )
                 await asyncio.sleep(wait_time)
 
-        raise RuntimeError("Connection error: Exceeded maximum number of connection retries.")
+        raise RuntimeError(
+            "Connection error: Exceeded maximum number of connection retries."
+        )
 
     async def _close(self) -> None:
         """
@@ -89,7 +104,7 @@ class RabbitMQManger:
             await self.connection.close()
             self.connection = None
 
-    async def __aenter__(self) -> 'RabbitMQManger':
+    async def __aenter__(self) -> "RabbitMQManger":
         """
         Asynchronous context manager entry method. Ensures the connection is established.
 
@@ -137,7 +152,9 @@ class RabbitMQManger:
             AbstractRobustQueue: The declared or existing queue.
         """
         if queue_name in self.queues:
-            print(f"Queue '{queue_name}' already declared, returning existing one.")
+            print(
+                f"Queue '{queue_name}' already declared, returning existing one."
+            )
             return self.queues[queue_name]
 
         # Declare a new queue
@@ -146,8 +163,6 @@ class RabbitMQManger:
         self.queues[queue_name] = queue  # Store the declared queue
         print(f"Queue '{queue_name}' declared successfully.")
         return queue
-
-
 
 
 # async def main():

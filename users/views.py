@@ -1,3 +1,12 @@
+"""
+* users management
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2025 - ali sharifi
+* https://github.com/alisharify7/user-service-management
+"""
+
 from fastapi_pagination import Page, Params
 from fastapi import Depends, HTTPException, Query
 from fastapi_pagination.ext.sqlalchemy import paginate
