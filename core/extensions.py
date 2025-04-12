@@ -12,9 +12,9 @@ from passlib.context import CryptContext
 from core.config import get_config
 from common_libs.rabbitmq import RabbitMQManger
 
-
 Setting = get_config()
-logger = None  # loaded on lifespan cycle
+
+logger = None  # loaded on lifespan cycle (module level)
 
 hashManager = CryptContext(schemes=["bcrypt"], deprecated="auto")
 rabbitManager = RabbitMQManger(

@@ -22,8 +22,6 @@ async def consume_users_messages():
 
                 await process_users_message(message)
 
-                await message.ack()
-
             except Exception as e:
                 await logger.info(f"Error processing message: {e}")
                 await message.nack(requeue=False)
