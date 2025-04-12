@@ -10,7 +10,6 @@
 from core import app
 from core.config import get_config
 
-
 Setting = get_config()
 
 

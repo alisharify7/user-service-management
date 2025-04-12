@@ -7,13 +7,13 @@
 * https://github.com/alisharify7/user-service-management
 """
 
-import uuid
-import typing
 import datetime
+import typing
+import uuid
 
 import sqlalchemy as sa
-import sqlalchemy.orm as so
 import sqlalchemy.ext.asyncio as AsyncSA
+import sqlalchemy.orm as so
 
 from core import get_config
 from core.db import BaseModelClass, get_session
@@ -74,10 +74,10 @@ class BaseModel(BaseModelClass):
         self.public_key = uuid.uuid4().hex
 
     async def save(
-        self,
-        db_session: AsyncSA.AsyncSession | None = None,
-        show_traceback: bool = True,
-        capture_traceback: bool = True,
+            self,
+            db_session: AsyncSA.AsyncSession | None = None,
+            show_traceback: bool = True,
+            capture_traceback: bool = True,
     ) -> bool:
         """
         Combination of two steps: add and commit session
@@ -104,9 +104,9 @@ class BaseModel(BaseModelClass):
             return False
 
     async def delete(
-        self,
-        capture_exception: bool = False,
-        session: AsyncSA.AsyncSession | None = None,
+            self,
+            capture_exception: bool = False,
+            session: AsyncSA.AsyncSession | None = None,
     ):
         """delete method"""
         db: AsyncSA.AsyncSession = session or get_session()

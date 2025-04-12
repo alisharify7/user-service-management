@@ -13,6 +13,7 @@ from pathlib import Path
 
 import redis.asyncio as redis
 from dotenv import load_dotenv
+
 from common_libs.utils import generate_random_string
 
 load_dotenv()
@@ -59,7 +60,7 @@ class BaseSetting:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
     DEBUG_QUERY: bool = (
-        os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
+            os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
     )
 
     def __str__(self):

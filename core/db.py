@@ -8,17 +8,17 @@
 """
 
 from typing import AsyncGenerator
+
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncSession,
     async_sessionmaker,
 )
-
 from sqlalchemy.orm import declarative_base
+
 from core.config import get_config
 
 Setting = get_config()
-
 
 engine = create_async_engine(
     url=Setting.SQLALCHEMY_DATABASE_URI,
@@ -26,7 +26,6 @@ engine = create_async_engine(
     max_overflow=10,
     echo=Setting.DEBUG_QUERY,
 )
-
 
 Session = async_sessionmaker(bind=engine, autoflush=False, autocommit=False)
 

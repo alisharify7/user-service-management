@@ -7,13 +7,14 @@
 * https://github.com/alisharify7/user-service-management
 """
 
-from core.config import get_config
-
 from passlib.context import CryptContext
+
+from core.config import get_config
 from common_libs.rabbitmq import RabbitMQManger
 
 
 Setting = get_config()
+logger = None  # loaded on lifespan cycle
 
 hashManager = CryptContext(schemes=["bcrypt"], deprecated="auto")
 rabbitManager = RabbitMQManger(
@@ -23,3 +24,4 @@ rabbitManager = RabbitMQManger(
     port=Setting.RABBITMQ_PORT,
     virtual_host=Setting.RABBITMQ_VHOST,
 )
+
