@@ -1,7 +1,10 @@
 """
-* user service management
-* author: @alisharify7
-* © Copyright 2024-1403.
+* users management
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2025 - ali sharifi
+* https://github.com/alisharify7/user-service-management
 """
 
 import os
@@ -92,7 +95,11 @@ class Setting(BaseSetting):
     RABBITMQ_USERNAME: str = os.environ.get("RABBITMQ_USERNAME")
     RABBITMQ_PASSWORD: str = os.environ.get("RABBITMQ_PASSWORD")
     RABBITMQ_HOST: str = os.environ.get("RABBITMQ_HOST")
-    RABBITMQ_PORT: str = os.environ.get("RABBITMQ_PORT")
+    RABBITMQ_PORT: int = (
+        5672
+        if not os.environ.get("RABBITMQ_PORT").isnumeric()
+        else int(os.environ.get("RABBITMQ_PORT"))
+    )
     RABBITMQ_VHOST: str = os.environ.get("RABBITMQ_VHOST")
 
     def __str__(self):
