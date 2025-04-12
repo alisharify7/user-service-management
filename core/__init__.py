@@ -33,15 +33,11 @@ async def lifespan(app: FastAPI):
     )
     app.state.logger = logger
     rabbitManager.attach_logger(logger)
-    await logger.info("test")
 
     from users.rabbit_operation import produce_users_messages, consume_users_messages
 
     await produce_users_messages()
     await consume_users_messages()
-
-
-
     yield
     await logger.shutdown()
 
