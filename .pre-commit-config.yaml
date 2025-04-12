@@ -1,0 +1,46 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3
+        args:
+          - .
+          - -v
+
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.9.0
+    hooks:
+      - id: pip-audit
+        language_version: python3
+        args:
+          - --output
+          - pip-audit-result
+          - -f
+          - json
+          - -v
+
+#  - repo: https://github.com/pylint-dev/pylint
+#    rev: v3.3.6
+#    hooks:
+#      - id: pylint
+#        language_version: python3
+#        args:
+#          - --output-format=colorized
+#          - --disable=all
+#          - --enable=E,W,F
+#
+#  - repo: https://github.com/pycqa/flake8
+#    rev: 7.2.0
+#    hooks:
+#      - id: flake8
+#        language_version: python3
+#        args:
+#          - --statistics
+#          - --tee
+#
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: v1.15.0
+#    hooks:
+#      - id: mypy
+#        language_version: python3

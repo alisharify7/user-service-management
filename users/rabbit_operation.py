@@ -6,6 +6,7 @@
 * Copyright (c) 2025 - ali sharifi
 * https://github.com/alisharify7/user-service-management
 """
+
 from aio_pika import Message, IncomingMessage
 from pika.delivery_mode import DeliveryMode
 
@@ -28,10 +29,8 @@ async def consume_users_messages():
                 await message.nack(requeue=False)
 
 
-
 async def process_users_message(message: IncomingMessage):
     await message.ack()
-
 
 
 async def produce_users_messages():
@@ -39,9 +38,6 @@ async def produce_users_messages():
     queue = await rabbitManager.declare_queue("users_queue", durable=True)
     message_body = "Hello, RabbitMQ!"
     message = Message(
-        body=message_body.encode(),
-        delivery_mode=DeliveryMode.Persistent.value
+        body=message_body.encode(), delivery_mode=DeliveryMode.Persistent.value
     )
-    await channel.default_exchange.publish(
-        message, routing_key=queue.name
-    )
+    await channel.default_exchange.publish(message, routing_key=queue.name)

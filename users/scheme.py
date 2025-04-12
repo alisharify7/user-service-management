@@ -24,9 +24,7 @@ class CreateUserScheme(BaseModel):
     gender: Optional[Gender] = None
 
     class Config:
-        from_attributes = (
-            True  # Enables conversion from ORM objects (Pydantic v2)
-        )
+        from_attributes = True  # Enables conversion from ORM objects (Pydantic v2)
 
 
 class BaseDumpUserScheme(BaseModel):
@@ -38,9 +36,7 @@ class BaseDumpUserScheme(BaseModel):
     gender: Gender
 
     class Config:
-        from_attributes = (
-            True  # Enables conversion from ORM objects (Pydantic v2)
-        )
+        from_attributes = True  # Enables conversion from ORM objects (Pydantic v2)
 
 
 class DumpUserScheme(BaseDumpUserScheme):

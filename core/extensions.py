@@ -24,4 +24,3 @@ rabbitManager = RabbitMQManger(
     port=Setting.RABBITMQ_PORT,
     virtual_host=Setting.RABBITMQ_VHOST,
 )
-

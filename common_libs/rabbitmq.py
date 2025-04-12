@@ -39,16 +39,14 @@ class RabbitMQManger:
     def attach_logger(self, logger: aiologger.Logger):
         self.logger = logger
 
-
-
     def __init__(
-            self,
-            host: str = "localhost",
-            port: int = 5672,
-            username: str = "guest",
-            password: str = "guest",
-            max_retry_connection: int = 10,
-            virtual_host: str = "/",
+        self,
+        host: str = "localhost",
+        port: int = 5672,
+        username: str = "guest",
+        password: str = "guest",
+        max_retry_connection: int = 10,
+        virtual_host: str = "/",
     ) -> None:
         """
         Initializes the RabbitMQManger instance.
@@ -70,8 +68,6 @@ class RabbitMQManger:
         self.queues: typing.Dict[str, AbstractRobustQueue] = {}
         self.virtual_host = virtual_host
 
-
-
     async def _connect(self) -> None:
         """
         Connects to RabbitMQ using the provided credentials and connection parameters.
@@ -91,16 +87,21 @@ class RabbitMQManger:
                     port=self.port,
                     virtual_host=self.virtual_host,
                 )
-                self.logger.info(f"rabbitmq: connected successfully to {self.host}:{self.port}")
+                self.logger.info(
+                    f"rabbitmq: connected successfully to {self.host}:{self.port}"
+                )
                 return
             except aio_pika.exceptions.AMQPError as e:
                 retries += 1
                 wait_time = retries * 2
-                self.logger.info(f"rabbitmq: connection failed for {self.host}:{self.port}, retry number:{retries}, wait_for: {wait_time}s,\nreason: {e.reason}")
+                self.logger.info(
+                    f"rabbitmq: connection failed for {self.host}:{self.port}, retry number:{retries}, wait_for: {wait_time}s,\nreason: {e.reason}"
+                )
                 await asyncio.sleep(wait_time)
 
         self.logger.info(
-            f"rabbitmq: connection failed for {self.host}:{self.port}, Connection error: Exceeded maximum number of connection retries")
+            f"rabbitmq: connection failed for {self.host}:{self.port}, Connection error: Exceeded maximum number of connection retries"
+        )
 
         raise RuntimeError(
             "Connection error: Exceeded maximum number of connection retries."
@@ -112,10 +113,10 @@ class RabbitMQManger:
         """
         if self.connection and not self.connection.is_closed:
             await self.connection.close()
-            await self.logger.info(f"rabbitmq: connection to {self.host}:{self.port} closed.")
+            await self.logger.info(
+                f"rabbitmq: connection to {self.host}:{self.port} closed."
+            )
             self.connection = None
-
-
 
     async def __aenter__(self) -> "RabbitMQManger":
         """
@@ -155,7 +156,9 @@ class RabbitMQManger:
 
         return self.channel
 
-    async def declare_queue(self, queue_name: str, *args, **kwargs) -> AbstractRobustQueue:
+    async def declare_queue(
+        self, queue_name: str, *args, **kwargs
+    ) -> AbstractRobustQueue:
         """
         Declares a queue in RabbitMQ if not already declared, otherwise returns the existing queue.
 
@@ -177,5 +180,3 @@ class RabbitMQManger:
         self.queues[queue_name] = queue  # Store the declared queue
         await self.logger.info(f"rabbitmq: Queue '{queue_name}' declared successfully.")
         return queue
-
-

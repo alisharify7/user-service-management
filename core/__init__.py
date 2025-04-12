@@ -6,6 +6,7 @@
 * Copyright (c) 2025 - ali sharifi
 * https://github.com/alisharify7/user-service-management
 """
+
 import logging
 from contextlib import asynccontextmanager
 
@@ -21,15 +22,14 @@ from core.extensions import logger, rabbitManager
 
 Settings = get_config()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     from common_libs.logger import get_async_logger
 
     global logger
     logger = await get_async_logger(
-        log_level=logging.INFO,
-        logger_name="user-service",
-        log_file="app.log"
+        log_level=logging.INFO, logger_name="user-service", log_file="app.log"
     )
     app.state.logger = logger
     rabbitManager.attach_logger(logger)
@@ -40,6 +40,7 @@ async def lifespan(app: FastAPI):
     await consume_users_messages()
     yield
     await logger.shutdown()
+
 
 def create_app(config_class: object) -> FastAPI:
     """main factory function for generation fastapi application"""
@@ -52,7 +53,7 @@ def create_app(config_class: object) -> FastAPI:
         docs_url=config_class.API_SWAGGER_URL,
         redoc_url=config_class.API_REDOC_URL,
         terms_of_service=config_class.API_TERM_URL,
-        lifespan=lifespan
+        lifespan=lifespan,
     )
 
     add_pagination(app)
@@ -67,4 +68,3 @@ def create_app(config_class: object) -> FastAPI:
 
 app = create_app(Settings)
 import core.base_views
-

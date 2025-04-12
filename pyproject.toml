@@ -1,6 +1,6 @@
 [tool.black]
-line-length = 79
-target-version = ['py38', 'py39', 'py310', 'py311', 'py313']
+line-length = 88
+target-version = ['py310', 'py311', 'py313']
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -24,7 +24,7 @@ check = false
 
 
 [tool.flake8]
-max-line-length = 79
+max-line-length = 88
 ignore = [
     "E501",  # Ignore line length warnings
     "W503",  # Ignore "line break before binary operator" warnings

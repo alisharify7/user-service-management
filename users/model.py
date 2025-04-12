@@ -42,8 +42,8 @@ class User(BaseModel):
     phone_number: so.Mapped[str] = so.mapped_column(
         sa.String(16), unique=True, nullable=True
     )
-    last_login: so.Mapped[typing.Optional[datetime.datetime]] = (
-        so.mapped_column(sa.TIMESTAMP(), nullable=True)
+    last_login: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
+        sa.TIMESTAMP(), nullable=True
     )
     login_attempts: so.Mapped[int] = so.mapped_column(
         sa.BigInteger(), default=0, nullable=False

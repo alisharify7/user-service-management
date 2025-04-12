@@ -13,7 +13,7 @@ async def get_async_logger(
     log_file: Optional[str] = None,
     rotation: RolloverInterval = RolloverInterval.MIDNIGHT,
     backup_count: int = 7,
-    encoding: str = "utf-8"
+    encoding: str = "utf-8",
 ) -> Logger:
     """
     Create an advanced asynchronous logger with optional file rotation.
@@ -34,11 +34,7 @@ async def get_async_logger(
     formatter = Formatter(log_format)
 
     handlers = [
-        AsyncStreamHandler(
-            stream=sys.stdout,
-            level=log_level,
-            formatter=formatter
-        )
+        AsyncStreamHandler(stream=sys.stdout, level=log_level, formatter=formatter)
     ]
 
     if log_file:

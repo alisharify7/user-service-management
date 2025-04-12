@@ -35,24 +35,18 @@ class BaseModel(BaseModelClass):
     public_key: so.Mapped[str] = so.mapped_column(
         sa.String(36), nullable=False, unique=True, index=True
     )  # unique key for each element <usually used in frontend>
-    created_at: so.Mapped[typing.Optional[datetime.datetime]] = (
-        so.mapped_column(
-            sa.TIMESTAMP(timezone=True),  # Add timezone support
-            default=lambda: datetime.datetime.now(datetime.UTC),
-        )
+    created_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
+        sa.TIMESTAMP(timezone=True),  # Add timezone support
+        default=lambda: datetime.datetime.now(datetime.UTC),
     )
-    verified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
-        so.mapped_column(
-            sa.TIMESTAMP(timezone=True),
-            default=lambda: datetime.datetime.now(datetime.UTC),
-        )
+    verified_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
+        sa.TIMESTAMP(timezone=True),
+        default=lambda: datetime.datetime.now(datetime.UTC),
     )
-    modified_at: so.Mapped[typing.Optional[datetime.datetime]] = (
-        so.mapped_column(
-            sa.TIMESTAMP(timezone=True),
-            onupdate=lambda: datetime.datetime.now(datetime.UTC),
-            default=lambda: datetime.datetime.now(datetime.UTC),
-        )
+    modified_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
+        sa.TIMESTAMP(timezone=True),
+        onupdate=lambda: datetime.datetime.now(datetime.UTC),
+        default=lambda: datetime.datetime.now(datetime.UTC),
     )
 
     @staticmethod
@@ -74,10 +68,10 @@ class BaseModel(BaseModelClass):
         self.public_key = uuid.uuid4().hex
 
     async def save(
-            self,
-            db_session: AsyncSA.AsyncSession | None = None,
-            show_traceback: bool = True,
-            capture_traceback: bool = True,
+        self,
+        db_session: AsyncSA.AsyncSession | None = None,
+        show_traceback: bool = True,
+        capture_traceback: bool = True,
     ) -> bool:
         """
         Combination of two steps: add and commit session
@@ -104,9 +98,9 @@ class BaseModel(BaseModelClass):
             return False
 
     async def delete(
-            self,
-            capture_exception: bool = False,
-            session: AsyncSA.AsyncSession | None = None,
+        self,
+        capture_exception: bool = False,
+        session: AsyncSA.AsyncSession | None = None,
     ):
         """delete method"""
         db: AsyncSA.AsyncSession = session or get_session()
