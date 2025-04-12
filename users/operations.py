@@ -1,14 +1,13 @@
 import sqlalchemy as sa
-import sqlalchemy.orm as so
 import sqlalchemy.ext.asyncio as AsyncSA
+from starlette import status as http_status
 
 from core.extensions import hashManager
 from users.model import User as UserModel
-from starlette import status as http_status
 
 
 async def create_user(
-    user_data: dict, db_session: AsyncSA.AsyncSession
+        user_data: dict, db_session: AsyncSA.AsyncSession
 ) -> tuple:
     """
     Attempts to create a new user in the database.
@@ -101,7 +100,7 @@ async def delete_user(user_id: int, db_session: AsyncSA.AsyncSession) -> tuple:
 
 
 async def update_user(
-    user_data: dict, user_id: int, db_session: AsyncSA.AsyncSession
+        user_data: dict, user_id: int, db_session: AsyncSA.AsyncSession
 ) -> tuple:
     """
     Updates the information of an existing user.
@@ -142,7 +141,7 @@ async def update_user(
 
 
 async def get_user_by_id(
-    user_id: int, db_session: AsyncSA.AsyncSession
+        user_id: int, db_session: AsyncSA.AsyncSession
 ) -> tuple:
     """
     Retrieves a user by their unique ID.
@@ -164,7 +163,7 @@ async def get_user_by_id(
 
 
 async def get_user_by_username(
-    username: str, db_session: AsyncSA.AsyncSession
+        username: str, db_session: AsyncSA.AsyncSession
 ) -> tuple:
     """
     Retrieves a user by their username.
@@ -186,7 +185,7 @@ async def get_user_by_username(
 
 
 async def get_user_by_public_key(
-    public_key: str, db_session: AsyncSA.AsyncSession
+        public_key: str, db_session: AsyncSA.AsyncSession
 ) -> tuple:
     """
     Retrieves a user by their public key.
@@ -208,6 +207,5 @@ async def get_user_by_public_key(
 
 
 def get_all_users(): ...
-
 
 # TODO: instead of get_user_by a field create a function get_user_by_field

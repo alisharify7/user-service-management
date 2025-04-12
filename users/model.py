@@ -7,9 +7,9 @@
 * https://github.com/alisharify7/user-service-management
 """
 
+import datetime
 import enum
 import typing
-import datetime
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so

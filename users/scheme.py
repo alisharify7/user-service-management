@@ -7,9 +7,10 @@
 * https://github.com/alisharify7/user-service-management
 """
 
-from pydantic import BaseModel, EmailStr, constr
 from typing import Optional
-from datetime import datetime
+
+from pydantic import BaseModel, EmailStr, constr
+
 from users.model import Gender
 
 
