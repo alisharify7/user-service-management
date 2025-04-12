@@ -9,9 +9,9 @@
 import logging
 from contextlib import asynccontextmanager
 
-import aio_pika
 from fastapi import FastAPI
 from fastapi_pagination import add_pagination
+
 
 from core.config import get_config
 from core.urls import urlpatterns
@@ -35,17 +35,10 @@ async def lifespan(app: FastAPI):
     rabbitManager.attach_logger(logger)
     await logger.info("test")
 
-    async with rabbitManager as manager:
-        channel = await manager.get_channel()
-        queue_name= "test_ali"
-        queue = await manager.declare_queue(queue_name)
+    from users.rabbit_operation import produce_users_messages, consume_users_messages
 
-        message_body = "test hello world"
-        message = aio_pika.Message(body=message_body.encode())
-        await channel.default_exchange.publish(
-            message, routing_key=queue.name
-        )
-        print(f"Message '{message_body}' sent to queue '{queue_name}'")
+    await produce_users_messages()
+    await consume_users_messages()
 
 
 

@@ -155,7 +155,7 @@ class RabbitMQManger:
 
         return self.channel
 
-    async def declare_queue(self, queue_name: str) -> AbstractRobustQueue:
+    async def declare_queue(self, queue_name: str, *args, **kwargs) -> AbstractRobustQueue:
         """
         Declares a queue in RabbitMQ if not already declared, otherwise returns the existing queue.
 
@@ -173,7 +173,7 @@ class RabbitMQManger:
 
         # Declare a new queue
         channel = await self.get_channel()
-        queue = await channel.declare_queue(queue_name, durable=True)
+        queue = await channel.declare_queue(queue_name, *args, **kwargs)
         self.queues[queue_name] = queue  # Store the declared queue
         await self.logger.info(f"rabbitmq: Queue '{queue_name}' declared successfully.")
         return queue
