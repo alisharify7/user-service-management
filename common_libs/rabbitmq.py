@@ -7,11 +7,12 @@
 * https://github.com/alisharify7/user-service-management
 """
 
-import typing
-import aio_pika
 import asyncio
-from aio_pika.robust_connection import AbstractRobustConnection
+import typing
+import aiologger
+import aio_pika
 from aio_pika.robust_channel import AbstractRobustChannel
+from aio_pika.robust_connection import AbstractRobustConnection
 from aio_pika.robust_queue import AbstractRobustQueue
 
 
@@ -35,14 +36,19 @@ class RabbitMQManger:
             cls.instance = super().__new__(cls)
         return cls.instance
 
+    def attach_logger(self, logger: aiologger.Logger):
+        self.logger = logger
+
+
+
     def __init__(
-        self,
-        host: str = "localhost",
-        port: int = 5672,
-        username: str = "guest",
-        password: str = "guest",
-        max_retry_connection: int = 10,
-        virtual_host: str = "/",
+            self,
+            host: str = "localhost",
+            port: int = 5672,
+            username: str = "guest",
+            password: str = "guest",
+            max_retry_connection: int = 10,
+            virtual_host: str = "/",
     ) -> None:
         """
         Initializes the RabbitMQManger instance.
@@ -64,6 +70,8 @@ class RabbitMQManger:
         self.queues: typing.Dict[str, AbstractRobustQueue] = {}
         self.virtual_host = virtual_host
 
+
+
     async def _connect(self) -> None:
         """
         Connects to RabbitMQ using the provided credentials and connection parameters.
@@ -72,6 +80,7 @@ class RabbitMQManger:
         Raises:
             RuntimeError: If the maximum number of connection retries is exceeded.
         """
+        self.logger.info(f"rabbitmq: trying to connect to {self.host}:{self.port}")
         retries = 0
         while retries <= self.max_retry_connection:
             try:
@@ -82,15 +91,16 @@ class RabbitMQManger:
                     port=self.port,
                     virtual_host=self.virtual_host,
                 )
-                print("Connected successfully.")
+                self.logger.info(f"rabbitmq: connected successfully to {self.host}:{self.port}")
                 return
             except aio_pika.exceptions.AMQPError as e:
                 retries += 1
                 wait_time = retries * 2
-                print(
-                    f"Connection error. Waiting for {wait_time} seconds.\n{e}"
-                )
+                self.logger.info(f"rabbitmq: connection failed for {self.host}:{self.port}, retry number:{retries}, wait_for: {wait_time}s,\nreason: {e.reason}")
                 await asyncio.sleep(wait_time)
+
+        self.logger.info(
+            f"rabbitmq: connection failed for {self.host}:{self.port}, Connection error: Exceeded maximum number of connection retries")
 
         raise RuntimeError(
             "Connection error: Exceeded maximum number of connection retries."
@@ -102,7 +112,10 @@ class RabbitMQManger:
         """
         if self.connection and not self.connection.is_closed:
             await self.connection.close()
+            await self.logger.info(f"rabbitmq: connection to {self.host}:{self.port} closed.")
             self.connection = None
+
+
 
     async def __aenter__(self) -> "RabbitMQManger":
         """
@@ -139,6 +152,7 @@ class RabbitMQManger:
 
         if self.channel is None or self.channel.is_closed:
             self.channel = await self.connection.channel()
+
         return self.channel
 
     async def declare_queue(self, queue_name: str) -> AbstractRobustQueue:
@@ -152,8 +166,8 @@ class RabbitMQManger:
             AbstractRobustQueue: The declared or existing queue.
         """
         if queue_name in self.queues:
-            print(
-                f"Queue '{queue_name}' already declared, returning existing one."
+            await self.logger.info(
+                f"rabbitmq: Queue '{queue_name}' already declared, returning existing one."
             )
             return self.queues[queue_name]
 
@@ -161,25 +175,7 @@ class RabbitMQManger:
         channel = await self.get_channel()
         queue = await channel.declare_queue(queue_name, durable=True)
         self.queues[queue_name] = queue  # Store the declared queue
-        print(f"Queue '{queue_name}' declared successfully.")
+        await self.logger.info(f"rabbitmq: Queue '{queue_name}' declared successfully.")
         return queue
 
 
-# async def main():
-#     async with RabbitMQManger() as manager:
-#         channel = await manager.get_channel()
-#         queue_name= "test_ali"
-#         queue = await manager.declare_queue(queue_name)
-#
-#         message_body = "test hello world"
-#         message = aio_pika.Message(body=message_body.encode())
-#         await channel.default_exchange.publish(
-#             message, routing_key=queue.name
-#         )
-#         print(f"Message '{message_body}' sent to queue '{queue_name}'")
-#
-#
-#
-#
-# if __name__ == "__main__":
-#     asyncio.run(main())
