@@ -3,6 +3,7 @@
 
 A FastAPI-based microservice for user management with RabbitMQ event integration, providing RESTful APIs and message queue support for distributed systems.
 
+## fully async support  async DB orm (sqlalchemy), async logging (stdout, file + rotation), async redis, async rabbitmq 
 
 ## Tech Stack
 <div>
