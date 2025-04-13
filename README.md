@@ -29,6 +29,10 @@ A FastAPI-based microservice for user management with RabbitMQ event integration
 * **Data Validation**: Employs Pydantic for input/output data validation.
 * **Persistence**: Utilizes a database for user data storage.
 
+
+<img src="./docs/scheme.png">
+<img src="./docs/db-schema.png">
+
 ## API Endpoints
 
 | Endpoint                           | Method | Description                        |
