@@ -7,14 +7,15 @@
 * https://github.com/alisharify7/user-service-management
 """
 
-from typing import Optional
+from typing import Optional, Union
 
-from pydantic import BaseModel, EmailStr, constr
-
+from pydantic import BaseModel, EmailStr, constr, ConfigDict
+from enum import Enum
 from users.model import Gender
 
 
 class CreateUserScheme(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     username: constr(max_length=256)
@@ -23,20 +24,15 @@ class CreateUserScheme(BaseModel):
     phone_number: Optional[constr(max_length=16)] = None
     gender: Optional[Gender] = None
 
-    class Config:
-        from_attributes = True  # Enables conversion from ORM objects (Pydantic v2)
-
 
 class BaseDumpUserScheme(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     first_name: str
     last_name: str
     username: constr(max_length=256)
     email_address: EmailStr
     phone_number: constr(max_length=16)
     gender: Gender
-
-    class Config:
-        from_attributes = True  # Enables conversion from ORM objects (Pydantic v2)
 
 
 class DumpUserScheme(BaseDumpUserScheme):
@@ -46,3 +42,26 @@ class DumpUserScheme(BaseDumpUserScheme):
 
 class UpdateUserScheme(BaseDumpUserScheme):
     password: constr(max_length=128)
+
+
+class UserEventType(str, Enum):
+    CREATED = "user.created"
+    UPDATED = "user.updated"
+    DELETED = "user.deleted"
+
+
+class CreateUserData(CreateUserScheme):
+    pass
+
+
+class UpdateUserData(UpdateUserScheme):
+    pass
+
+
+class DeleteUserData(BaseModel):
+    id: int
+
+
+class UserEvent(BaseModel):
+    event_type: UserEventType
+    data: Union[CreateUserData, UpdateUserData, DeleteUserData]
