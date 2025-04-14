@@ -7,6 +7,7 @@
 * https://github.com/alisharify7/user-service-management
 """
 
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -18,16 +19,16 @@ from common_libs.logger import get_async_logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+
     extensions.logger = await get_async_logger(
         log_level=logging.INFO, logger_name="user-service", log_file="app.log"
     )
+    await extensions.logger.info(f"Starting application.")
+
     extensions.rabbitManager.attach_logger(extensions.logger)
 
-    from users.rabbit_operation import produce_users_messages, consume_users_messages
-
-    await produce_users_messages()
-    await consume_users_messages()
-    extensions.logger.info(f"Starting application, {app.__doc__}")
+    # from users.rabbit_operation import consume_users_messages
+    # rabbit_task = asyncio.create_task(consume_users_messages())
 
     yield
     await extensions.logger.shutdown()
