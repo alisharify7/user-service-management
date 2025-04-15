@@ -8,12 +8,14 @@
 """
 
 import asyncio
+import logging
 import typing
 import aiologger
 import aio_pika
 from aio_pika.robust_channel import AbstractRobustChannel
 from aio_pika.robust_connection import AbstractRobustConnection
 from aio_pika.robust_queue import AbstractRobustQueue
+from common_libs.logger import get_async_logger
 
 
 class RabbitMQManger:
@@ -35,9 +37,6 @@ class RabbitMQManger:
         if cls.instance is None:
             cls.instance = super().__new__(cls)
         return cls.instance
-
-    def attach_logger(self, logger: aiologger.Logger):
-        self.logger = logger
 
     def __init__(
         self,
@@ -67,6 +66,14 @@ class RabbitMQManger:
         self.max_retry_connection = max_retry_connection
         self.queues: typing.Dict[str, AbstractRobustQueue] = {}
         self.virtual_host = virtual_host
+
+    async def setup_logger(self):
+        self.logger = await get_async_logger(
+            log_level=logging.INFO,
+            log_file="rabbitmq.log",
+            logger_name="rabbitmq-logger",
+        )
+        await self.logger.info("Logger Created successfully.")
 
     async def _connect(self) -> None:
         """
