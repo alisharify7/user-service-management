@@ -1,0 +1,57 @@
+#
+#  * base compose file from: https://github.com/alisharify7/preconfigured-docker-compose
+#
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: app
+    container_name: app
+    ports:
+      - 8000:8000
+    networks:
+      - internal_proxy
+    restart: always
+
+
+  postgres_database:
+    image: 'docker.io/postgres:${POSTGRES_TAG_VERSION:-latest}' # replace latest
+    container_name: postgres_db
+    hostname: postgres_db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-root}" # replace with .env
+    networks:
+      - internal_proxy
+    volumes:
+      - pg-data:/var/lib/postgresql/data/
+    env_file:
+      - .docker.env
+
+  postgres_pgadmin:
+    image: 'docker.io/dpage/pgadmin4:${PGADMIN_TAG_VERSION:-latest}' # replace latest
+    container_name: postgres_pgadmin
+    hostname: postgres_pgadmin
+    restart: always
+    ports:
+      - 8001:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL:-default@example.com}" # TODO: read from .env
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD:-password}"
+    networks:
+      - internal_proxy
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/
+    env_file:
+      - .docker.env
+
+
+
+volumes:
+  pg-data:
+  pgadmin-data:
+
+networks:
+  internal_proxy:
