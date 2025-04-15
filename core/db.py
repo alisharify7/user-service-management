@@ -7,6 +7,7 @@
 * https://github.com/alisharify7/user-service-management
 """
 
+from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
@@ -33,6 +34,13 @@ BaseModelClass = declarative_base()
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    """Get a fresh session for connection to database"""
+    async with Session() as session:
+        yield session
+
+
+@asynccontextmanager
+async def rabbit_get_session() -> AsyncGenerator[AsyncSession, None]:
     """Get a fresh session for connection to database"""
     async with Session() as session:
         yield session
