@@ -10,14 +10,16 @@ services:
     hostname: app
     container_name: app
     ports:
-      - 8000:8000
+      - "8000:8000"
     networks:
       - internal_proxy
+    volumes:
+      - .:/app
     restart: always
 
 
   postgres_database:
-    image: 'docker.io/postgres:${POSTGRES_TAG_VERSION:-latest}' # replace latest
+    image: 'docker.iranserver.com/postgres:${POSTGRES_TAG_VERSION:-latest}' # replace latest
     container_name: postgres_db
     hostname: postgres_db
     restart: always
@@ -31,12 +33,12 @@ services:
       - .docker.env
 
   postgres_pgadmin:
-    image: 'docker.io/dpage/pgadmin4:${PGADMIN_TAG_VERSION:-latest}' # replace latest
+    image: 'docker.iranserver.com/dpage/pgadmin4:${PGADMIN_TAG_VERSION:-latest}' # replace latest
     container_name: postgres_pgadmin
     hostname: postgres_pgadmin
     restart: always
     ports:
-      - 8001:80
+      - "8001:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL:-default@example.com}" # TODO: read from .env
       PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD:-password}"
@@ -55,3 +57,4 @@ volumes:
 
 networks:
   internal_proxy:
+    external: true
