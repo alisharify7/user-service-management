@@ -27,8 +27,8 @@ class CreateUserScheme(BaseModel):
 
 class BaseDumpUserScheme(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    first_name: str
-    last_name: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     username: constr(max_length=256)
     email_address: EmailStr
     phone_number: constr(max_length=16)
@@ -50,18 +50,18 @@ class UserEventType(str, Enum):
     DELETED = "user.deleted"
 
 
-class CreateUserData(CreateUserScheme):
+class CreateUserEvent(CreateUserScheme):
     pass
 
 
-class UpdateUserData(UpdateUserScheme):
+class UpdateUserEvent(UpdateUserScheme):
     pass
 
 
-class DeleteUserData(BaseModel):
+class DeleteUserEvent(BaseModel):
     id: int
 
 
 class UserEvent(BaseModel):
     event_type: UserEventType
-    data: Union[CreateUserData, UpdateUserData, DeleteUserData]
+    data: Union[CreateUserEvent, UpdateUserEvent, DeleteUserEvent]
