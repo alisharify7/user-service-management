@@ -22,30 +22,30 @@ async def create_user(user_data: dict, db_session: AsyncSA.AsyncSession) -> tupl
     """
     query = sa.select(UserModel).filter(
         sa.or_(
-            UserModel.username == user_data.username,
-            UserModel.phone_number == user_data.phone_number,
-            UserModel.email_address == user_data.email_address,
+            UserModel.username == user_data["username"],
+            UserModel.phone_number == user_data["phone_number"],
+            UserModel.email_address == user_data["email_address"],
         )
     )
     result = (await db_session.execute(query)).scalar_one_or_none()
     if result:
-        if result.username == user_data.username:
+        if result.username == user_data["username"]:
             return (
                 http_status.HTTP_409_CONFLICT,
                 "Username already exists.",
             )
-        elif result.phone_number == user_data.phone_number:
+        elif result.phone_number == user_data["phone_number"]:
             return (
                 http_status.HTTP_409_CONFLICT,
                 "Phone number already exists.",
             )
-        elif result.email_address == user_data.email_address:
+        elif result.email_address == user_data["email_address"]:
             return (
                 http_status.HTTP_409_CONFLICT,
                 "Email address already exists.",
             )
 
-    new_user = UserModel(**user_data.model_dump())
+    new_user = UserModel(**user_data)
     new_user.set_password(new_user.password)
     new_user.set_public_key()
     db_session.add(new_user)
@@ -115,7 +115,7 @@ async def update_user(
         - On error: `(500, "An error occurred")`
     """
 
-    user_data = user_data.model_dump()
+    user_data = user_data
     user_data["password"] = hashManager.hash(user_data["password"])
     query = sa.update(UserModel).where(UserModel.id == user_id).values(**user_data)
     try:
