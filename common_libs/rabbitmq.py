@@ -10,8 +10,8 @@
 import asyncio
 import logging
 import typing
-import aiologger
 import aio_pika
+from tabulate import tabulate
 from aio_pika.robust_channel import AbstractRobustChannel
 from aio_pika.robust_connection import AbstractRobustConnection
 from aio_pika.robust_queue import AbstractRobustQueue
@@ -24,8 +24,11 @@ class RabbitMQManger:
     This class follows the Singleton design pattern to ensure that only one instance exists.
     """
 
+    # TODO: separate __ methods and create sub classes for manager class
+
     instance: typing.Optional["RabbitMQManger"] = None
     queues: typing.Dict[str, AbstractRobustQueue] = {}
+    channels: dict = dict()
 
     def __new__(cls, *args, **kwargs) -> "RabbitMQManger":
         """
@@ -62,7 +65,6 @@ class RabbitMQManger:
         self.username = username
         self.password = password
         self.connection: typing.Optional[AbstractRobustConnection] = None
-        self.channel: typing.Optional[AbstractRobustChannel] = None
         self.max_retry_connection = max_retry_connection
         self.queues: typing.Dict[str, AbstractRobustQueue] = {}
         self.virtual_host = virtual_host
@@ -119,6 +121,11 @@ class RabbitMQManger:
         Closes the current connection if it is open.
         """
         if self.connection and not self.connection.is_closed:
+            # close all channels <check if we close connection all channels will be closed automatically or not, just for now>
+            for channel in self.channels:
+                await self.channels[channel].close()
+                await self.logger.info(f"connection to channel: {channel} closed.")
+
             await self.connection.close()
             await self.logger.info(
                 f"rabbitmq: connection to {self.host}:{self.port} closed."
@@ -148,7 +155,7 @@ class RabbitMQManger:
         """
         await self._close()
 
-    async def get_channel(self) -> AbstractRobustChannel:
+    async def get_channel(self, channel_name: str) -> AbstractRobustChannel:
         """
         Returns an active RabbitMQ channel. If no active channel exists, creates one.
 
@@ -158,13 +165,16 @@ class RabbitMQManger:
         if self.connection is None or self.connection.is_closed:
             await self._connect()
 
-        if self.channel is None or self.channel.is_closed:
-            self.channel = await self.connection.channel()
+        if channel_name not in self.channels:
+            self.channels[channel_name] = await self.connection.channel()
+        elif self.channels[channel_name].is_closed:
+            self.channels.pop(channel_name)
+            self.channels[channel_name] = await self.connection.channel()
 
-        return self.channel
+        return self.channels[channel_name]
 
     async def declare_queue(
-        self, queue_name: str, *args, **kwargs
+        self, queue_name: str, channel_name: str, *args, **kwargs
     ) -> AbstractRobustQueue:
         """
         Declares a queue in RabbitMQ if not already declared, otherwise returns the existing queue.
@@ -181,9 +191,33 @@ class RabbitMQManger:
             )
             return self.queues[queue_name]
 
-        # Declare a new queue
-        channel = await self.get_channel()
+        channel = await self.get_channel(channel_name=channel_name)
+
         queue = await channel.declare_queue(queue_name, *args, **kwargs)
         self.queues[queue_name] = queue  # Store the declared queue
         await self.logger.info(f"rabbitmq: Queue '{queue_name}' declared successfully.")
         return queue
+
+    async def status_channels(self) -> None:
+        """
+            print status of all channels in table format
+        :return: None
+        """
+
+        table_data = []
+        for channel in self.channels:
+            table_data.append(
+                (
+                    channel,
+                    (
+                        "Connected"
+                        if not self.channels[channel].is_closed
+                        else "Disconnected"
+                    ),
+                )
+            )
+        print()
+        print(
+            tabulate(table_data, ["channel name", "channel status"], tablefmt="github")
+        )
+        print()
