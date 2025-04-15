@@ -54,9 +54,10 @@ class BaseSetting:
     SQLALCHEMY_DATABASE_URI: str = (
         f"postgresql+asyncpg://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
     )
-    print(SQLALCHEMY_DATABASE_URI)
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
-    DEBUG_QUERY: bool = os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
+    DEBUG_QUERY: bool = (
+        os.environ.get("DATABASE_DEBUG_QUERY", "False") == "True"
+    )  # sqlalchemy echo config
 
     def __str__(self):
         return "BaseSetting Class"

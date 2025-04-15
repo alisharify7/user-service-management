@@ -14,6 +14,7 @@ Setting = get_config()
 
 
 @app.get("/")
+@app.get("/version")
 def index():
     return {
         "status": "ok",
