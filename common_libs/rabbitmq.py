@@ -67,11 +67,11 @@ class RabbitMQManger:
         self.queues: typing.Dict[str, AbstractRobustQueue] = {}
         self.virtual_host = virtual_host
 
-    async def setup_logger(self):
+    async def setup_logger(self, logger_name: str, log_file: str):
         self.logger = await get_async_logger(
             log_level=logging.INFO,
-            log_file="rabbitmq.log",
-            logger_name="rabbitmq-logger",
+            log_file=log_file,
+            logger_name=logger_name,
         )
         await self.logger.info("Logger Created successfully.")
 
