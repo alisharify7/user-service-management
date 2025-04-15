@@ -28,7 +28,7 @@ async def create_user(
 ):
     """creating new user in database."""
     result = await user_operations.create_user(
-        user_data=user_data, db_session=db_session
+        user_data=user_data.model_dump(), db_session=db_session
     )
     if len(result) != 1:
         raise HTTPException(status_code=result[0], detail=result[1])
@@ -86,7 +86,9 @@ async def get_all_users(
     params: Params = Depends(get_all_users_pagination),
     db_session: AsyncSA.AsyncSession = Depends(get_session),
 ):
-    return await paginate(db_session, sa.select(UserModel), params)
+    return await paginate(
+        db_session, sa.select(UserModel), params
+    )  # fastapi_paginate doesn't support asyncGenerator
 
 
 @users_router.put("/{user_id}", status_code=http_status.HTTP_204_NO_CONTENT)
