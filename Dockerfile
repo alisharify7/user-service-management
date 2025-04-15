@@ -2,13 +2,12 @@ FROM docker.arvancloud.ir/python:3.13-alpine
 
 WORKDIR /app
 
-COPY ./requirements.txt /app/requirements.txt
 
 COPY . /app/
 
+COPY ./requirements.txt /app/requirements.txt
 
-RUN apk add curl
-
+#RUN apk add curl
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000

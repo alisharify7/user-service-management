@@ -15,8 +15,8 @@ from common_libs.rabbitmq import RabbitMQManger
 Setting = get_config()
 
 
-hashManager = CryptContext(schemes=["bcrypt"], deprecated="auto")
-rabbitManager = RabbitMQManger(
+hashManager: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
+rabbitManager: RabbitMQManger = RabbitMQManger(
     username=Setting.RABBITMQ_USERNAME,
     password=Setting.RABBITMQ_PASSWORD,
     host=Setting.RABBITMQ_HOST,

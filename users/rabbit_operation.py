@@ -7,6 +7,7 @@
 * https://github.com/alisharify7/user-service-management
 """
 
+import asyncio
 import json
 
 from aio_pika import IncomingMessage
@@ -16,7 +17,7 @@ from core.db import rabbit_get_session as get_session
 from core.extensions import rabbitManager
 
 
-async def process_consumed_message(message: IncomingMessage):
+async def process_consumed_message(message):
     await rabbitManager.logger.info(
         f"Message consumed successfully. message_size: {message.body_size}, message_id: {message.message_id}"
     )
@@ -47,8 +48,11 @@ async def process_consumed_message(message: IncomingMessage):
 
 
 async def consume_users_messages():
-    queue = await rabbitManager.declare_queue("users_queue", durable=True)
+    queue = await rabbitManager.declare_queue(
+        "users_queue", "consume_users_operation_channel", durable=True
+    )
     await queue.consume(process_consumed_message)
+    await rabbitManager.status_channels()
 
 
 async def process_create_users(message: IncomingMessage, user_data: UserEvent):

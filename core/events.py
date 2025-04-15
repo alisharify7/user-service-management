@@ -26,9 +26,9 @@ async def lifespan(app: FastAPI):
         logger_name="rabbitmq-consumer", log_file="rabbitmq-consumer.log"
     )
     rabbit_task = asyncio.create_task(consume_users_messages())
-    #
+
     # for i in range(10):
-    #     d = UserEvent(event_type=UserEventType.CREATED,
+    #     d = UserEvent(event_type=UserEventType.UPDATED,
     #                   data=CreateUserEvent(username=f"from_rabbitmq{f"{random.randint(1,64)}" if i in [2,6,4] else ""}", password="pass",
     #                                        gender=Gender.male, phone_number=f"rabbit{f"{random.randint(1,64)}" if i in [2,6,4] else ""}",
     #                                        email_address=f"rabbit{f"{random.randint(1,64)}" if i in [2,6,4] else ""}@mq.ir"))
