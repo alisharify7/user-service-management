@@ -52,7 +52,6 @@ async def consume_users_messages():
         "users_queue", "consume_users_operation_channel", durable=True
     )
     await queue.consume(process_consumed_message)
-    await rabbitManager.status_channels()
 
 
 async def process_create_users(message: IncomingMessage, user_data: UserEvent):
