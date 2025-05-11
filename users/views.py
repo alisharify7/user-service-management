@@ -9,8 +9,9 @@
 
 import sqlalchemy as sa
 import sqlalchemy.ext.asyncio as AsyncSA
-from fastapi import Depends, HTTPException, Query
+
 from fastapi_pagination import Page, Params
+from fastapi import Depends, HTTPException, Query
 from fastapi_pagination.ext.sqlalchemy import paginate
 from starlette import status as http_status
 
