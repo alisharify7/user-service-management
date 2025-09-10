@@ -3,7 +3,7 @@
 
 A FastAPI-based microservice for user management with RabbitMQ event integration, providing RESTful APIs and message queue support for distributed systems.
 
-## fully async support  async DB orm (sqlalchemy), async logging (stdout, file + rotation), async redis, async rabbitmq 
+## fully async support  async DB orm (sqlalchemy), async logging (stdout, file + rotation), async redis, async rabbitmq
 
 ## Tech Stack
 <div>
@@ -55,9 +55,10 @@ The service listens to these queues:
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.12+
 - RabbitMQ server
 - FastAPI dependencies
+- uv package manager
 
 ## Installation
 
