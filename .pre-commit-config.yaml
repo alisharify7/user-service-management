@@ -1,45 +1,38 @@
+---
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '^.*/alembic/.*\.py$'
+      - id: end-of-file-fixer
+        exclude: '^.*/alembic/.*\.py$'
+      - id: check-merge-conflict
+        exclude: '^.*/alembic/.*\.py$'
+      - id: requirements-txt-fixer
+        exclude: '^.*/alembic/.*\.py$'
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args:
+          - --trailing-comma
+        exclude: '^.*/alembic/.*\.py$'
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        args:
+          - --remove-all-unused-imports
+          - --remove-unused-variables
+          - --ignore-init-module-imports
+          - --in-place
+          - --remove-unused-variables
+          - --exclude=common.py
+          - --exclude=apps.py
+        exclude: '^.*/alembic/.*\.py$'
   - repo: https://github.com/psf/black
-    rev: 25.1.0
+    rev: 24.4.1
     hooks:
       - id: black
-        language_version: python3
-        args:
-          - .
-
-  - repo: https://github.com/pypa/pip-audit
-    rev: v2.9.0
-    hooks:
-      - id: pip-audit
-        language_version: python3
-        args:
-          - --output
-          - pip-audit-result
-          - -f
-          - json
-          - -v
-
-#  - repo: https://github.com/pylint-dev/pylint
-#    rev: v3.3.6
-#    hooks:
-#      - id: pylint
-#        language_version: python3
-#        args:
-#          - --output-format=colorized
-#          - --disable=all
-#          - --enable=E,W,F
-#
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 7.2.0
-#    hooks:
-#      - id: flake8
-#        language_version: python3
-#        args:
-#          - --statistics
-#          - --tee
-#
-#  - repo: https://github.com/pre-commit/mirrors-mypy
-#    rev: v1.15.0
-#    hooks:
-#      - id: mypy
-#        language_version: python3
+        exclude: '^.*/alembic/.*\.py$'
