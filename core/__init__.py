@@ -10,10 +10,10 @@
 from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 
-from core.events import lifespan
 from core.config import get_config
-from core.urls import urlpatterns
 from core.db import BaseModelClass, engine
+from core.events import lifespan
+from core.urls import urlpatterns
 
 Settings = get_config()
 

@@ -1,12 +1,11 @@
-import sys
 import logging
+import sys
 from typing import Optional
-
 
 from aiologger import Logger
 from aiologger.formatters.base import Formatter
-from aiologger.handlers.streams import AsyncStreamHandler
 from aiologger.handlers.files import AsyncTimedRotatingFileHandler, RolloverInterval
+from aiologger.handlers.streams import AsyncStreamHandler
 
 
 async def get_async_logger(

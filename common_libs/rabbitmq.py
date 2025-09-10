@@ -10,11 +10,13 @@
 import asyncio
 import logging
 import typing
+
 import aio_pika
-from tabulate import tabulate
 from aio_pika.robust_channel import AbstractRobustChannel
 from aio_pika.robust_connection import AbstractRobustConnection
 from aio_pika.robust_queue import AbstractRobustQueue
+from tabulate import tabulate
+
 from common_libs.logger import get_async_logger
 
 

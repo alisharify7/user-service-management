@@ -7,10 +7,11 @@
 * https://github.com/alisharify7/user-service-management
 """
 
+from enum import Enum
 from typing import Optional, Union
 
-from pydantic import BaseModel, EmailStr, constr, ConfigDict
-from enum import Enum
+from pydantic import BaseModel, ConfigDict, EmailStr, constr
+
 from users.model import Gender
 
 

@@ -9,8 +9,8 @@
 
 from passlib.context import CryptContext
 
-from core.config import get_config
 from common_libs.rabbitmq import RabbitMQManger
+from core.config import get_config
 
 Setting = get_config()
 

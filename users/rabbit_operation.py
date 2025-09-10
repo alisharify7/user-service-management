@@ -7,14 +7,14 @@
 * https://github.com/alisharify7/user-service-management
 """
 
-import asyncio
 import json
 
 from aio_pika import IncomingMessage
-from users.scheme import UserEvent
-from users.operations import create_user, delete_user, update_user
+
 from core.db import rabbit_get_session as get_session
 from core.extensions import rabbitManager
+from users.operations import create_user, delete_user, update_user
+from users.scheme import UserEvent
 
 
 async def process_consumed_message(message):

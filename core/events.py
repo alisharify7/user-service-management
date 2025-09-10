@@ -8,10 +8,8 @@
 """
 
 import asyncio
-import random
 from contextlib import asynccontextmanager
 
-import aio_pika
 from fastapi import FastAPI
 
 from core import extensions
@@ -19,13 +17,12 @@ from core import extensions
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from users.scheme import UserEvent, CreateUserEvent, UserEventType, Gender
     from users.rabbit_operation import consume_users_messages
 
     await extensions.rabbitManager.setup_logger(
         logger_name="rabbitmq-consumer", log_file="rabbitmq-consumer.log"
     )
-    rabbit_task = asyncio.create_task(consume_users_messages())
+    asyncio.create_task(consume_users_messages())
 
     # for i in range(10):
     #     d = UserEvent(event_type=UserEventType.UPDATED,

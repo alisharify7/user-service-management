@@ -4,35 +4,35 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
-        exclude: '^.*/alembic/.*\.py$'
       - id: end-of-file-fixer
-        exclude: '^.*/alembic/.*\.py$'
       - id: check-merge-conflict
-        exclude: '^.*/alembic/.*\.py$'
       - id: requirements-txt-fixer
-        exclude: '^.*/alembic/.*\.py$'
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        args:
-          - --trailing-comma
-        exclude: '^.*/alembic/.*\.py$'
+
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1
     hooks:
       - id: autoflake
+        files: \.py$
         args:
           - --remove-all-unused-imports
           - --remove-unused-variables
           - --ignore-init-module-imports
           - --in-place
-          - --remove-unused-variables
           - --exclude=common.py
           - --exclude=apps.py
-        exclude: '^.*/alembic/.*\.py$'
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: \.py$
+        args:
+          - --profile=black
+          - --trailing-comma
+
+
   - repo: https://github.com/psf/black
     rev: 24.4.1
     hooks:
       - id: black
-        exclude: '^.*/alembic/.*\.py$'
+        files: \.py$

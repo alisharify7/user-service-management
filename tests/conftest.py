@@ -1,9 +1,10 @@
 import pytest
+from httpx import AsyncClient
 
 from core import create_app, get_config
-from .utils import get_session_test, engine
-from core.db import get_session, BaseModelClass
-from httpx import AsyncClient
+from core.db import BaseModelClass, get_session
+
+from .utils import engine, get_session_test
 
 
 @pytest.fixture()
