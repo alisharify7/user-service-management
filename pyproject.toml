@@ -1,6 +1,24 @@
+[project]
+name = "users-management-service"
+version = "0.1.0"
+description = "users-management-service"
+readme = "README.md"
+requires-python = ">=3.12"
+package-mode = false
+dependencies = [
+    "aio-pika>=9.5.7",
+    "alembic>=1.16.5",
+    "asyncpg>=0.30.0",
+    "fastapi>=0.116.1",
+    "pydantic>=2.11.7",
+    "python-decouple>=3.8",
+    "sqlalchemy>=2.0.43",
+    "uvicorn>=0.35.0",
+]
+
 [tool.black]
 line-length = 88
-target-version = ['py310', 'py311', 'py313']
+target-version = ['py312', 'py313', 'py314']
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -51,3 +69,8 @@ files = "."
 disallow_untyped-calls = true
 disallow_untyped-defs = true
 strict = true
+
+[dependency-groups]
+dev = [
+    "ipython>=9.5.0",
+]
