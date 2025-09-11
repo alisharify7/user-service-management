@@ -6,7 +6,8 @@ COPY . /app/
 COPY ./requirements.txt /app/requirements.txt
 
 RUN apk add curl
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install uv
+RUN uv sync
 
 EXPOSE 8000
 CMD ["uvicorn", "app:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
