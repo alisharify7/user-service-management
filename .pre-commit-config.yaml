@@ -8,6 +8,16 @@ repos:
       - id: check-merge-conflict
       - id: requirements-txt-fixer
 
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: \.py$
+        args:
+          - --profile=black
+          - --trailing-comma
+
+
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1
     hooks:
@@ -21,14 +31,6 @@ repos:
           - --exclude=common.py
           - --exclude=apps.py
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        files: \.py$
-        args:
-          - --profile=black
-          - --trailing-comma
 
 
   - repo: https://github.com/psf/black
