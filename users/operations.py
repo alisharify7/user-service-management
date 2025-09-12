@@ -2,7 +2,7 @@ import sqlalchemy as sa
 import sqlalchemy.ext.asyncio as AsyncSA
 from starlette import status as http_status
 
-from core.extensions import hashManager
+from core.extensions import hash_manager
 from users.model import User as UserModel
 
 
@@ -116,7 +116,7 @@ async def update_user(
     """
 
     user_data = user_data
-    user_data["password"] = hashManager.hash(user_data["password"])
+    user_data["password"] = hash_manager.hash(user_data["password"])
     query = sa.update(UserModel).where(UserModel.id == user_id).values(**user_data)
     try:
         result = await db_session.execute(query)

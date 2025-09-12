@@ -19,7 +19,7 @@ from core import extensions
 async def lifespan(app: FastAPI):
     from users.rabbit_operation import consume_users_messages
 
-    await extensions.rabbitManager.setup_logger(
+    await extensions.rabbit_manager.setup_logger(
         logger_name="rabbitmq-consumer", log_file="rabbitmq-consumer.log"
     )
     asyncio.create_task(consume_users_messages())
@@ -42,4 +42,4 @@ async def lifespan(app: FastAPI):
     #         await rabbit_manager.logger.info("Message published.")
 
     yield
-    await extensions.rabbitManager.logger.shutdown()
+    await extensions.rabbit_manager.logger.shutdown()

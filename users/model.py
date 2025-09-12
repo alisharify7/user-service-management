@@ -14,7 +14,7 @@ import typing
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
-from core.extensions import hashManager
+from core.extensions import hash_manager
 from core.model import BaseModel
 
 
@@ -53,4 +53,4 @@ class User(BaseModel):
     )
 
     def set_password(self, username: str) -> None:
-        self.password = hashManager.hash(username)
+        self.password = hash_manager.hash(username)
