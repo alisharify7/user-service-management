@@ -14,9 +14,8 @@ from core.config import get_config
 
 Setting = get_config()
 
-
-hashManager: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
-rabbitManager: RabbitMQManger = RabbitMQManger(
+hash_manager: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
+rabbit_manager: RabbitMQManger = RabbitMQManger(
     username=Setting.RABBITMQ_USERNAME,
     password=Setting.RABBITMQ_PASSWORD,
     host=Setting.RABBITMQ_HOST,
