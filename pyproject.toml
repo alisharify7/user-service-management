@@ -8,12 +8,16 @@ package-mode = false
 
 dependencies = [
     "aio-pika>=9.5.7",
+    "aiologger>=0.7.0",
     "alembic>=1.16.5",
     "asyncpg>=0.30.0",
     "fastapi>=0.116.1",
+    "fastapi-pagination>=0.14.1",
+    "passlib>=1.7.4",
     "pydantic>=2.11.7",
     "python-decouple>=3.8",
     "python-ulid>=3.1.0",
+    "redis>=6.4.0",
     "sqlalchemy>=2.0.43",
     "uvicorn>=0.35.0",
 ]
