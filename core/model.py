@@ -9,11 +9,11 @@
 
 import datetime
 import typing
-import uuid
 
 import sqlalchemy as sa
 import sqlalchemy.ext.asyncio as AsyncSA
 import sqlalchemy.orm as so
+from ulid import ULID
 
 from core import get_config
 from core.db import BaseModelClass, get_session
@@ -29,12 +29,16 @@ class BaseModel(BaseModelClass):
 
     __abstract__ = True
     id: so.Mapped[int] = so.mapped_column(sa.BigInteger(), primary_key=True)
+    ulid: so.Mapped[str] = so.mapped_column(
+        sa.String(32),
+        nullable=False,
+        unique=True,
+        index=True,
+        default=lambda: ULID().hex,
+    )
     is_active: so.Mapped[bool] = so.mapped_column(
         sa.Boolean(), nullable=False, default=False, unique=False
     )
-    public_key: so.Mapped[str] = so.mapped_column(
-        sa.String(36), nullable=False, unique=True, index=True
-    )  # unique key for each element <usually used in frontend>
     created_at: so.Mapped[typing.Optional[datetime.datetime]] = so.mapped_column(
         sa.TIMESTAMP(timezone=True),  # Add timezone support
         default=lambda: datetime.datetime.now(datetime.UTC),
@@ -62,10 +66,6 @@ class BaseModel(BaseModelClass):
         """
         name = name.replace("-", "_").replace(" ", "")
         return f"{Setting.DATABASE_TABLE_PREFIX_NAME}{name}".lower()
-
-    def set_public_key(self):
-        """This Method Set a Unique PublicKey of each record"""
-        self.public_key = uuid.uuid4().hex
 
     async def save(
         self,
