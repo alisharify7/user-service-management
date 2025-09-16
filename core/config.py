@@ -122,6 +122,8 @@ class Development(Setting):
 
     DEBUG: bool = True
 
+    def __init__(self):
+        super()
     def __str__(self):
         return "Development Config Class"
 
@@ -136,8 +138,8 @@ def get_config(debug: bool = BaseSetting.DEBUG) -> object:
     """
     match debug:
         case True:
-            return Development
+            return Development()
         case False:
-            return Production
+            return Production()
         case _:
-            return Production
+            return Production()
